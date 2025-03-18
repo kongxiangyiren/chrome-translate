@@ -18,6 +18,7 @@ export default defineConfig({
     ElementPlus({}),
     tailwindcss(),
     cdn({
+      prodUrl: '//unpkg.com/{name}@{version}/{path}',
       modules: [
         'vue',
         {
