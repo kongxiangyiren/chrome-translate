@@ -308,12 +308,13 @@ async function translate() {
 
   if (!('ai' in window) || !('languageDetector' in window.ai) || !('translator' in window.ai)) {
     // The Language Detector API is available.
-    return (dialogVisible.value = true), localStorage.removeItem('dialog')
+    return (dialogVisible.value = true), localStorage.removeItem('dialog'), (loading.value = false)
   }
 
-  if (textarea.value === '') {
-    return (textarea2.value = '')
+  if (!textarea.value) {
+    return (textarea2.value = ''), (loading.value = false)
   }
+
   let result = ''
   if (from.value === 'auto') {
     let detector
@@ -323,7 +324,9 @@ async function translate() {
 
     if (canDetect === 'no') {
       // The language detector isn't usable.
-      return (dialogVisible.value = true), localStorage.removeItem('dialog')
+      return (
+        (dialogVisible.value = true), localStorage.removeItem('dialog'), (loading.value = false)
+      )
     }
 
     if (canDetect === 'readily') {
@@ -349,8 +352,7 @@ async function translate() {
   }
 
   if (from.value === to.value || result === to.value) {
-    textarea2.value = textarea.value
-    return
+    return (textarea2.value = textarea.value), (loading.value = false)
   }
 
   console.log(result, from.value, to.value)
@@ -366,7 +368,7 @@ async function translate() {
 
   if (canTranslator === 'no') {
     // The language detector isn't usable.
-    return (dialogVisible.value = true), localStorage.removeItem('dialog')
+    return (dialogVisible.value = true), localStorage.removeItem('dialog'), (loading.value = false)
   }
 
   if (canTranslator === 'readily') {
