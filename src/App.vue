@@ -311,7 +311,7 @@ async function translate() {
     return (dialogVisible.value = true), localStorage.removeItem('dialog')
   }
 
-  if (!textarea.value) {
+  if (textarea.value === '') {
     return (textarea2.value = '')
   }
   let result = ''
