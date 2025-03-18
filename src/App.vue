@@ -301,6 +301,9 @@ function handleClose() {
 
 async function translate() {
   loading.value = true
+
+  textarea2.value = ''
+
   console.log(to.value, from.value, textarea.value)
 
   if (!('ai' in window) || !('languageDetector' in window.ai) || !('translator' in window.ai)) {
