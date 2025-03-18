@@ -27,6 +27,11 @@ export default defineConfig({
           path: 'dist/index.full.js',
           css: 'dist/index.css',
         },
+        // {
+        //   name: '@element-plus/icons-vue',
+        //   var: 'ElementPlusIconsVue',
+        //   path: 'dist/index.iife.min.js',
+        // },
       ],
     }),
     VitePWA({

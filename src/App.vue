@@ -45,13 +45,17 @@
           </el-col>
 
           <el-col :span="12">
-            <el-input
-              v-model="textarea2"
-              :rows="15"
-              type="textarea"
-              placeholder="译文"
-              :disabled="true"
-            />
+            <div class="results">
+              <el-input
+                v-model="textarea2"
+                :rows="15"
+                type="textarea"
+                placeholder="译文"
+                :readonly="true"
+                :disabled="loading"
+              />
+              <el-icon @click="copy"><CopyDocument /></el-icon>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -89,7 +93,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElSelect, ElOption, ElButton, ElRow, ElCol, ElInput, ElDialog } from 'element-plus'
+import { CopyDocument } from '@element-plus/icons-vue'
+import { ElSelect, ElOption, ElButton, ElRow, ElCol, ElInput, ElDialog, ElIcon } from 'element-plus'
 const from = ref<language | 'auto'>('auto')
 const to = ref<language>('zh')
 
@@ -383,6 +388,32 @@ async function translate() {
   await translator.destroy()
   loading.value = false
 }
+
+function copy() {
+  navigator.clipboard.writeText(textarea2.value)
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.results {
+  position: relative;
+}
+
+.results .el-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: none;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.results:hover .el-icon {
+  display: block;
+}
+</style>
