@@ -1,9 +1,11 @@
 {
   "name": "chrome-translate",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
+    "chrome:build": "vite build --mode chrome",
+    "chrome:dev": "vite build --mode chrome --watch",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -12,11 +14,12 @@
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/ .github/ public/ .vscode/"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "@tailwindcss/vite": "^4.0.14",
+    "chrome-extension-core": "^0.2.4",
     "element-plus": "^2.9.6",
     "tailwindcss": "^4.0.14",
     "vue": "^3.5.13"

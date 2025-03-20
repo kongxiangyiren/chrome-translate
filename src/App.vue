@@ -291,6 +291,17 @@ const textarea2 = ref('')
 const loading = ref(false)
 const dialogVisible = ref(localStorage.getItem('dialog') !== 'false')
 
+// 获取query参数
+const query = window.location.search
+const params = new URLSearchParams(query)
+const text = params.get('text')
+
+if (text) {
+  textarea.value = text
+  // 删除query参数
+  window.history.replaceState({}, '', window.location.pathname)
+}
+
 function handleClose() {
   localStorage.setItem('dialog', 'false')
   dialogVisible.value = false
