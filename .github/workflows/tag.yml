@@ -35,13 +35,13 @@ jobs:
           npm run build
 
       - name: zip build web
-        run: zip -r chrome-translate.zip ./dist
+        run: cd dist && zip -r chrome-translate.zip ./* && mv chrome-translate.zip ../ && cd ..
 
       - name: build chrome extension
         run: npm run chrome:build
 
       - name: zip build extension
-        run: zip -r chrome-translate-extension.zip ./dist
+        run: cd dist && zip -r chrome-translate-extension.zip ./* && mv chrome-translate-extension.zip ../ && cd ..
 
       - name: Release
         uses: softprops/action-gh-release@v2
