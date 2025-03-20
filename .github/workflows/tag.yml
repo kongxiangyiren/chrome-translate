@@ -1,4 +1,4 @@
-name: 打包chrome插件
+name: 打包tags
 on:
   push:
     tags:
@@ -18,7 +18,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  build-to-chrome-extension:
+  build-to-tags:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -38,7 +38,7 @@ jobs:
         run: zip -r chrome-translate.zip ./dist
 
       - name: build chrome extension
-        run: npm run build:chrome
+        run: npm run chrome:build
 
       - name: zip build extension
         run: zip -r chrome-translate-extension.zip ./dist
