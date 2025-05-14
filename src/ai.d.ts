@@ -1,24 +1,18 @@
 // 扩展 window.ai
 declare global {
   interface Window {
-    ai: AI
+    LanguageDetector: AILanguageDetectorFactory
+    Translator: AITranslatorFactory
   }
-  let ai: AI
-}
-
-interface AI {
-  translator: AITranslatorFactory
-  languageDetector: AILanguageDetectorFactory
+  let LanguageDetector: AILanguageDetectorFactory
+  let Translator: AITranslatorFactory
 }
 
 interface AITranslatorFactory {
-  capabilities: () => Promise<{
-    languagePairAvailable: (
-      sourceLanguage: string,
-      targetLanguage: string,
-    ) => 'no' | 'readily' | 'after-download'
-    available: 'no' | 'readily' | 'after-download'
-  }>
+  availability: ({
+    sourceLanguage: string,
+    targetLanguage: string,
+  }) => Promise<'unavailable' | 'downloadable' | 'downloading' | 'available'>
   create: (option: {
     sourceLanguage: string
     targetLanguage: string
@@ -32,10 +26,7 @@ interface AITranslatorFactory {
 }
 
 interface AILanguageDetectorFactory {
-  capabilities: () => Promise<{
-    languageAvailable: (language: string) => 'no' | 'readily' | 'after-download'
-    available: 'no' | 'readily' | 'after-download'
-  }>
+  availability: () => Promise<'unavailable' | 'downloadable' | 'downloading' | 'available'>
 
   create: (option?: {
     monitor?: (m: {

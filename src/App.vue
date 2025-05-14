@@ -317,7 +317,7 @@ async function translate() {
 
   console.log(to.value, from.value, textarea.value)
 
-  if (!('ai' in window) || !('languageDetector' in window.ai) || !('translator' in window.ai)) {
+  if (!('LanguageDetector' in window) || !('Translator' in window)) {
     // The Language Detector API is available.
     return (dialogVisible.value = true), localStorage.removeItem('dialog'), (loading.value = false)
   }
@@ -329,26 +329,26 @@ async function translate() {
   let result = ''
   if (from.value === 'auto') {
     let detector
-    const languageDetectorCapabilities = await ai.languageDetector.capabilities()
-    const canDetect = languageDetectorCapabilities.available
+    const languageDetectorCapabilities = await LanguageDetector.availability()
+    const canDetect = languageDetectorCapabilities
     console.log(canDetect)
 
-    if (canDetect === 'no') {
+    if (canDetect === 'unavailable') {
       // The language detector isn't usable.
       return (
         (dialogVisible.value = true), localStorage.removeItem('dialog'), (loading.value = false)
       )
     }
 
-    if (canDetect === 'readily') {
+    if (canDetect === 'available') {
       // The language detector can immediately be used.
-      detector = await self.ai.languageDetector.create()
+      detector = await LanguageDetector.create()
     } else {
       // The language detector can be used after model download.
-      detector = await self.ai.languageDetector.create({
+      detector = await LanguageDetector.create({
         monitor(m) {
           m.addEventListener('downloadprogress', (e) => {
-            console.log(`Downloaded ${e.loaded} of ${e.total} bytes.`)
+            console.log(`Downloaded ${e.loaded * 100}%`)
           })
         },
       })
@@ -368,32 +368,31 @@ async function translate() {
 
   console.log(result, from.value, to.value)
 
-  const translatorCapabilities = await self.ai.translator.capabilities()
-  const canTranslator = translatorCapabilities.languagePairAvailable(
-    from.value === 'auto' ? result : from.value,
-    to.value,
-  )
+  const canTranslator = await Translator.availability({
+    sourceLanguage: from.value === 'auto' ? result : from.value,
+    targetLanguage: to.value,
+  })
   let translator
 
   console.log(canTranslator)
 
-  if (canTranslator === 'no') {
+  if (canTranslator === 'unavailable') {
     // The language detector isn't usable.
     return (dialogVisible.value = true), localStorage.removeItem('dialog'), (loading.value = false)
   }
 
-  if (canTranslator === 'readily') {
-    translator = await self.ai.translator.create({
+  if (canTranslator === 'available') {
+    translator = await Translator.create({
       sourceLanguage: from.value === 'auto' ? result : from.value,
       targetLanguage: to.value,
     })
   } else {
-    translator = await self.ai.translator.create({
+    translator = await Translator.create({
       sourceLanguage: from.value === 'auto' ? result : from.value,
       targetLanguage: to.value,
       monitor(m) {
         m.addEventListener('downloadprogress', (e) => {
-          console.log(`Downloaded ${e.loaded} of ${e.total} bytes.`)
+          console.log(`Downloaded ${e.loaded * 100}%`)
         })
       },
     })
