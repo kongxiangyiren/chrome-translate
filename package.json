@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "chrome:build": "vite build --mode chrome",
+    "chrome:dev": "vite build --mode chrome --watch",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
