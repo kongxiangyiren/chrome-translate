@@ -1,6 +1,6 @@
 // 监听安装事件
 chrome.runtime.onInstalled.addListener(function () {
-  console.log('installed')
+  console.log('installed');
   // 创建右键菜单
   chrome.contextMenus.create(
     {
@@ -9,22 +9,22 @@ chrome.runtime.onInstalled.addListener(function () {
       // 选中文本
       contexts: ['selection'],
       visible: true,
-      enabled: true,
+      enabled: true
     },
     function () {
-      console.log('contextMenus.create')
-    },
-  )
-})
+      console.log('contextMenus.create');
+    }
+  );
+});
 
 // 监听右键菜单点击事件
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
+chrome.contextMenus.onClicked.addListener(function (info) {
   if (info.menuItemId === 'chrome-translate') {
     chrome.tabs.create({
-      url: 'index.html?text=' + info.selectionText,
-    })
+      url: 'index.html?text=' + info.selectionText
+    });
   }
-})
+});
 
 // 设置Popup页
 // chrome.action.setPopup({
@@ -32,8 +32,8 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
 // })
 
 // action 左键点击跳转
-chrome.action.onClicked.addListener(function (tab) {
+chrome.action.onClicked.addListener(function () {
   chrome.tabs.create({
-    url: 'index.html',
-  })
-})
+    url: 'index.html'
+  });
+});

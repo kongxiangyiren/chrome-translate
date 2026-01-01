@@ -1,29 +1,28 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
-import ElementPlus from 'unplugin-element-plus/vite'
-import tailwindcss from '@tailwindcss/vite'
+import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
+import vueDevTools from 'vite-plugin-vue-devtools';
 
-import cdn from 'vite-plugin-cdn-import'
-import { VitePWA } from 'vite-plugin-pwa'
-import { resolve } from 'node:path'
+import tailwindcss from '@tailwindcss/vite';
+import ElementPlus from 'unplugin-element-plus/vite';
+import cdn from 'vite-plugin-cdn-import';
+import { VitePWA } from 'vite-plugin-pwa';
+
+import { resolve } from 'node:path';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  console.log('mode', mode)
-
   const background: Record<string, string> =
-    mode === 'chrome' ? { background: resolve('src/background.ts') } : {}
+    mode === 'chrome' ? { background: resolve('src/background.ts') } : {};
 
   return {
     base: mode === 'chrome' ? './' : '/chrome-translate/',
     plugins: [
       vue(),
-      vueDevTools(),
       ElementPlus({}),
       tailwindcss(),
+      vueDevTools(),
       mode !== 'chrome'
         ? cdn({
             prodUrl: '//unpkg.com/{name}@{version}/{path}',
@@ -33,20 +32,20 @@ export default defineConfig(({ mode }) => {
                 name: 'element-plus',
                 var: 'ElementPlus',
                 path: 'dist/index.full.js',
-                css: 'dist/index.css',
+                css: 'dist/index.css'
               },
-              // {
-              //   name: '@element-plus/icons-vue',
-              //   var: 'ElementPlusIconsVue',
-              //   path: 'dist/index.iife.min.js',
-              // },
-            ],
+              {
+                name: '@element-plus/icons-vue',
+                var: 'ElementPlusIconsVue',
+                path: 'dist/index.iife.min.js'
+              }
+            ]
           })
         : undefined,
       mode !== 'chrome'
         ? VitePWA({
             devOptions: {
-              enabled: false,
+              enabled: false
             },
             registerType: 'autoUpdate',
             injectRegister: 'inline',
@@ -59,17 +58,17 @@ export default defineConfig(({ mode }) => {
                 {
                   src: '512x.png',
                   sizes: '512x512',
-                  type: 'image/png',
-                },
-              ],
-            },
+                  type: 'image/png'
+                }
+              ]
+            }
           })
-        : undefined,
+        : undefined
     ],
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-      },
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
     },
     build: {
       reportCompressedSize: false,
@@ -81,19 +80,19 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: resolve('index.html'),
-          ...background,
+          ...background
         },
         output: {
           chunkFileNames: 'assets/js/[name]-[hash].js',
           assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
-          entryFileNames: (chunkInfo) => {
+          entryFileNames: chunkInfo => {
             if (chunkInfo.name === 'background') {
-              return 'background.js'
+              return 'background.js';
             } else {
-              return 'assets/js/[name]-[hash].js'
+              return 'assets/js/[name]-[hash].js';
             }
-          },
-        },
+          }
+        }
       },
 
       // 移除log
@@ -103,9 +102,9 @@ export default defineConfig(({ mode }) => {
           //生产环境时移除console.log()
           drop_console: true,
           //生产环境时移除debugger
-          drop_debugger: false,
-        },
-      },
-    },
-  }
-})
+          drop_debugger: false
+        }
+      }
+    }
+  };
+});

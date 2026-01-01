@@ -14,9 +14,6 @@ dist-ssr
 coverage
 *.local
 
-/cypress/videos/
-/cypress/screenshots/
-
 # Editor directories and files
 .idea
 *.suo
@@ -27,5 +24,11 @@ coverage
 
 *.tsbuildinfo
 
+.eslintcache
 
-dev-dist
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Vitest
+__screenshots__/
